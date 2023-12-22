@@ -6,10 +6,10 @@ public class TestConsoleApp : IPlugin
     static void Main()
     {
         TestConsoleApp testConsole = new TestConsoleApp();
-        testConsole.PerfomanceAction();
+        testConsole.PerformAction();
     }
 
-    public void PerfomanceAction()
+    public void PerformAction()
     {
         Console.WriteLine(GetType() + " connected.");
     }

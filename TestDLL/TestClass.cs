@@ -3,7 +3,7 @@ using Plugin;
 
 public class TestDll : IPlugin
 {
-    public void PerfomanceAction()
+    public void PerformAction()
     {
         Console.WriteLine(GetType() + " connected.");
     }

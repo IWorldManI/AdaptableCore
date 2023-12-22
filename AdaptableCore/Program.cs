@@ -6,45 +6,60 @@ using Plugin;
 
 namespace AdaptableCore
 {
-    class Program
+    public class AdaptableService
     {
-        static void Main()
-        {
-            string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private readonly string dllFolderPath;
 
-            string dllFolderPath = Path.Combine(currentDirectory, "AdaptableDLL");
+        public AdaptableService(string dllFolderPath)
+        {
+            this.dllFolderPath = dllFolderPath;
 
             if (!Directory.Exists(dllFolderPath))
             {
                 Directory.CreateDirectory(dllFolderPath);
             }
+        }
+
+        public void ProcessPlugins()
+        {
+            string[] dllFiles = Directory.GetFiles(dllFolderPath, "*.dll");
+
+            foreach (string dllFile in dllFiles)
+            {
+                try
+                {
+                    Assembly assembly = Assembly.LoadFrom(dllFile);
+
+                    Type pluginType = assembly.GetTypes().FirstOrDefault(type => typeof(IPlugin).IsAssignableFrom(type));
+
+                    if (pluginType != null)
+                    {
+                        IPlugin plugin = Activator.CreateInstance(pluginType) as IPlugin;
+
+                        plugin.PerformAction();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error loading DLL {dllFile}: {ex.Message}");
+                }
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string dllFolderPath = Path.Combine(currentDirectory, "AdaptableDLL");
+
+            AdaptableService adaptableService = new AdaptableService(dllFolderPath);
 
             while (true)
             {
-                string[] dllFiles = Directory.GetFiles(dllFolderPath, "*.dll");
-
-                foreach (string dllFile in dllFiles)
-                {
-                    try
-                    {
-                        Assembly assembly = Assembly.LoadFrom(dllFile);
-
-                        Type pluginType = assembly.GetTypes().FirstOrDefault(type => typeof(IPlugin).IsAssignableFrom(type));
-
-                        if (pluginType != null)
-                        {
-                            IPlugin plugin = (IPlugin)Activator.CreateInstance(pluginType);
-
-                            plugin.PerfomanceAction();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Ошибка при загрузке DLL {dllFile}: {ex.Message}");
-                    }
-                }
+                adaptableService.ProcessPlugins();
             }
-
         }
     }
 }
