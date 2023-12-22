@@ -17,7 +17,7 @@ namespace AdaptableCore.Test
         [SetUp]
         public void Setup()
         {
-            tempDirectory = "C:\\Users\\mmari\\source\\repos\\AdaptableCore\\AdaptableCore\\bin\\Debug\\net6.0\\AdaptableDLL";
+            tempDirectory = AdaptableCore.AdaptableService.dllFolderPath;
             Directory.CreateDirectory(tempDirectory);
         }
 
@@ -64,5 +64,30 @@ namespace AdaptableCore.Test
             string[] dllFiles = Directory.GetFiles(directoryPath, "*.dll");
             return dllFiles.Length > 0;
         }
+
+        /// <summary>
+        /// Test to verify that the AdaptableService constructor creates the specified directory if it does not exist.
+        /// </summary>
+        [Test]
+        public void TestAdaptableServiceCreationWithNonexistentDirectory()
+        {
+            string nonExistentDirectory = Path.Combine(tempDirectory, "NonExistentDirectory");
+
+            try
+            {
+                AdaptableService adaptableService = new AdaptableService(nonExistentDirectory);
+
+                Assert.IsTrue(Directory.Exists(nonExistentDirectory), "Directory not created");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"The test failed with the error: {ex.Message}");
+            }
+            finally
+            {
+                Directory.Delete(nonExistentDirectory, true);
+            }
+        }
+
     }
 }

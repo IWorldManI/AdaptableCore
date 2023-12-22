@@ -8,12 +8,10 @@ namespace AdaptableCore
 {
     public class AdaptableService
     {
-        private readonly string dllFolderPath;
+        public static string dllFolderPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "AdaptableDLL");
 
         public AdaptableService(string dllFolderPath)
         {
-            this.dllFolderPath = dllFolderPath;
-
             if (!Directory.Exists(dllFolderPath))
             {
                 Directory.CreateDirectory(dllFolderPath);
