@@ -1,10 +1,14 @@
 # AdaptableCore
 
-AdaptableCore is a C# console application designed for dynamically loading and executing plugins provided as DLL files.
+**AdaptableCore** is a C# console application designed for dynamically loading and executing plugins provided as DLL files.
+
+---
 
 ## Description
 
-The AdaptableCore project provides an example implementation of a plugin architecture in C#. The main functionality of the application involves dynamically loading libraries from a specified directory and executing actions provided by plugins.
+The **AdaptableCore** project provides an example implementation of a plugin architecture in C#. The main functionality of the application involves dynamically loading libraries from a specified directory and executing actions provided by plugins.
+
+---
 
 ## Project Structure
 
@@ -12,6 +16,8 @@ The AdaptableCore project provides an example implementation of a plugin archite
 - **Plugin**: The `IPlugin` interface, which all plugins must implement.
 - **TestConsoleApp**: Example plugin in the form of a console application.
 - **TestDll**: Example plugin in the form of a DLL library.
+
+---
 
 ## How to Use
 
@@ -23,6 +29,8 @@ The AdaptableCore project provides an example implementation of a plugin archite
    - Place the DLL file in the "AdaptableDLL" folder.
 
 3. **Run the Application**: Run AdaptableCore.exe. The application will dynamically load and execute all plugins from the "AdaptableDLL" folder.
+
+---
 
 ## Example Plugins
 
@@ -59,4 +67,12 @@ public class TestDll : IPlugin
         Console.WriteLine(GetType() + " connected.");
     }
 }
+```
+
+### IPlugin
+```csharp
+public interface IPlugin
+    {
+        void PerformAction();
+    }
 ```
